@@ -14,10 +14,11 @@ I obtained my best results with a relatively simple fully convolutional architec
 
 Details of my experiments are given in the next sections.
 
-**Implementation** 
+**Implementation**.
 I build my models based on the original DCGAN code in core Theano. Note that the code uses the old cuda Theano backend.  
 
-**References**
+**References**.
+
 [1] Context Encoders: Feature Learning by Inpainting. D. Pathak, P. Krähenbühl, J. Donahue
 
 T. Darrell, A. A. Efros. Computer Vision and Pattern Recognition (CVPR), 2016.
