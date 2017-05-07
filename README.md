@@ -2,7 +2,7 @@
 
 ## Conditional Image Generation
 
-### Introduction
+### In a nutshell
 
 **Goal**. The project is to generate the center region of images conditioned on the outside border and a caption. 
 The task is applied on images from the mscoco dataset downsampled to 64 x 64 images, where the 32 x 32 center is masked out:
