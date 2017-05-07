@@ -19,9 +19,7 @@ I build my models based on the original DCGAN code in core Theano. Note that the
 
 **References**.
 
-[1] Context Encoders: Feature Learning by Inpainting. D. Pathak, P. Krähenbühl, J. Donahue
-
-T. Darrell, A. A. Efros. Computer Vision and Pattern Recognition (CVPR), 2016.
+[1] Context Encoders: Feature Learning by Inpainting. D. Pathak, P. Krähenbühl, J. Donahue, T. Darrell, A. A. Efros. Computer Vision and Pattern Recognition (CVPR), 2016.
 
 [2] Deep Convolutional Generative Adversarial Networks, A.Radford, L. Metz, S.Chintala, code available as  https://github.com/Newmu/dcgan_code
 
