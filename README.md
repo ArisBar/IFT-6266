@@ -9,7 +9,7 @@ The task is applied on images from the mscoco dataset downsampled to 64 x 64 ima
 
 **My approach**. I focussed on conditioning on the outside border, leaving the inclusion of captions for future work. 
 I approached the problem using deep convolutional [1] autoencoder architectures akin to Ref [2], with L2 and adversarial losses. 
-I obtained my best results with a relatively simple fully convolutional architecture with skip connections, reLu and leaky reLu activations, and 5 x 5 kernel size, using a weighted combination of a L2  and Wasserstein GAN (WGAN) [3] loss. Exemples of reconstructed images from the mscoco  validation set are given below.
+I obtained my best results with a relatively simple fully convolutional architecture with skip connections and a weighted combination of a L2  and Wasserstein GAN (WGAN) [3] loss. Exemples of reconstructed images from the mscoco  validation set are given below.
 
 
 Details of my experiments are given in the next sections.
@@ -19,8 +19,11 @@ I build my models based on the original DCGAN code in core Theano. Note that the
 
 **References**
 [1] Context Encoders: Feature Learning by Inpainting. D. Pathak, P. Krähenbühl, J. Donahue
+
 T. Darrell, A. A. Efros. Computer Vision and Pattern Recognition (CVPR), 2016.
+
 [2] Deep Convolutional Generative Adversarial Networks, A.Radford, L. Metz, S.Chintala, code available as  https://github.com/Newmu/dcgan_code
+
 [3] Wasserstein GAN, M. Arjovsky, S. Chintala, L. Bottou https://arxiv.org/abs/1701.07875.
 
 
