@@ -116,7 +116,7 @@ Traditional GAN inputs are purely noisy samples.
 I was curious to see whether adding noise in the middle of my generator 
 (by downsampling down to 1 x 1, flatten, and concatenating a randomly generator noise vector before upsampling again) would improve the expressivity of the model.  In fact the resulting images looked slightly worse: 
 
-![Wgan_noise](/images/Wgan_noise_train190png)
+![Wgan_noise](/images/Wgan_noise_train190.png)
 
 #### Reinforced context 
 
