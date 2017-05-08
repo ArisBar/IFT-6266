@@ -141,7 +141,7 @@ I've implemented the 2nd option, the results are as follow:
 ### Acknowledgments. 
 
 Thanks are due to Stephanie Laroque, Sandeep Subramanian and Chiheb Trabelsi for discussions and help. 
-An immense thank you also to Olexa Bilaniuk for his amazing technical support, especially debugging Theano. 
+An immense thank you also to Olexa Bilaniuk for his super effective technical support, especially debugging Theano. 
 
 
 ### References
