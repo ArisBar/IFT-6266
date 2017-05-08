@@ -9,7 +9,7 @@ The task is applied on images from the mscoco dataset downsampled to 64 x 64 ima
 
 **Approach amd results**. I focussed on conditioning on the outside border, leaving the inclusion of captions for future work. 
 I approached the problem using deep convolutional autoencoder architectures akin to Ref [1], with L2 and adversarial losses [2]. 
-I obtained my best results with a relatively simple fully convolutional architecture withskip connections, a weighted combination of a L2  loss and a Wasserstein GAN (WGAN) loss [3] and Adam optimizer. 
+I obtained my best results with a relatively simple fully convolutional architecture with skip connections, batchnorm, Adam optimizer, and a weighted combination of a L2  loss and a Wasserstein GAN (WGAN) loss [3]. 
 
 #### Best Wgan: Training (left) and validation (right) images 
 ![Best_training](/images/Wgan_new_F5_train185.png)        !![Best_val](/images/Wgan_new_F5_val195.png)
@@ -53,7 +53,7 @@ I've experimented with variants including a channel-wise dense layer as in Ref [
 The various architectures I've tested evolved as follows:
 
 - DCGAN: addition of a **discriminator** convolutional network with sigmoid output activation,  trained jointly with the generator to discriminate between fake and real images [2]; the generator is trained to fool the discrimonator. 
-- Upgrade to Wgan loss, which arguably stabilizes training and addresses the mode collapse problem. The Wgan loss is obtrained from standard GAN by removing the log of the adversarial losses -- and clipping the weights at each iteration throughout training.
+- Upgrade to Wgan loss, which arguably stabilizes training and addresses the mode collapse problem. The Wgan loss is obtained from standard GAN by removing the log of the adversarial losses, clipping the weights at each iteration throughout training, and using linear ouput activation for the discriminator (instead of a sigmoid). 
 
 
 For the first version of these models, I've used as generator loss the sum of an adversarial loss and a L2 recontruction loss 
@@ -71,17 +71,72 @@ As an attempt to overcome these difficulites I decided to simplify my models in 
 - downsample only until 4 x 4  and up again
 
 which slightly improved convergence the quality of my images. However the key steps towards having a decent generative model have been the following: 
-- add skip connections between downsampling and upsampling layers in the generator (thanks are due to Alex Lamb and Sandeep for suggesting the idea), which not only facilitates convergence but re-enforce the conditioning on the context.
+- add 'skip connections' between downsampling and upsampling layers in the generator (thanks are due to Alex Lamb and Sandeep for suggesting the idea), which not only facilitates convergence but re-enforce the conditioning on the context. These are built by concatenating layers along the channel axis. 
 - I've increased the filter size to 5 x 5. That had a great impact on the image quality. 
 
+I ended up with the following architecture for my Wgan:
+
+#### Generator
 
 
+| Layer | Input | Output | Kernel size |                 
+| ------|-------|--------|-------------|
+| conv1 | 3 x 64 x 64 | 32 x 32 x 32 | 5 x 5 |
+| conv2 | 32 x 32 x 32 | 64 x 16 x 16 | 5 x 5 |
+| conv3 |  64 x 16 x 16 | 128 x 8 x 8 | 5 x 5 |
+| conv4 |  128 x 8 x 8 | 256 x 4 x 4 | 5 x 5 |
+| deconv1| 256 x 4 x 4 | (128+128) x 8 x 8 | 5 x 5 |
+| deconv2 | (128+128)  x 8 x 8 | (64+64) x 4 x 4 | 5 x 5 |
+| deconv3 | (64+64) x 16 x 16 | 3 x 32 x 32 | 5 x 5 |
 
-### Reinforced context 
+#### Discriminator 
 
-### Outlook
+| Layer | Input | Output | Kernel size |                 
+| ------|-------|--------|-------------|
+| conv1 | 3 x 64 x 64 | 32 x 32 x 32 | 5 x 5 |
+| conv2 | 32 x 32 x 32 | 64 x 16 x 16 | 5 x 5 |
+| conv3 |  64 x 16 x 16 | 128 x 8 x 8 | 5 x 5 |
+| conv4 |  128 x 8 x 8 | 256 x 4 x 4 | 5 x 5 |
+| pool + flatten | 256 x 4 x 4 | 256 ||
+| output | 256 | 1 | | 
+
+
+which generated the images shown in the Introduction. 
+
+
+### Additional Experimentation 
+
+I've continued experimenting on my model by modifying in two ways.
+
+#### Adding noise 
+
+Traditional GAN inputs are purely noisy samples. 
+I was curious to see whether adding noise in the middle of my generator 
+(by downsampling down to 1 x 1, flatten, and concatenating a randomly generator noise vector before upsampling again) would improve the expressivity of the model.  In fact the resulting images looked slightly worse: 
+
+![Wgan_noise](/images/Wgan_noise_train190png)
+
+#### Reinforced context 
+
+Finally, if a more approriate choice of hyperparameters should be able to improve the quality of the center images, 
+one of the challenges is to insure continuity with the border. I can think of two ways to (further) 'reinforce context'  and improve border continuity: 
+
+- Re-inject the input (border) of the generator in each of the downsampling layers. One way to do this is to convolve the input with 1 x 1 kernels and to concatenate the features maps. 
+- Design the generator to generate a thickening of the center image (say 36 x 36 instead of 32 x 32)  by a few pixels, trained with a L2 loss to match the corresponding region of the original image. 
+
+I've implemented the 2nd option, the results are as follow: 
+
+#### Wgan with reinforced context: Training (left) and validation (right) images
+
+![Wgan_context_train](/images/Wgan_context_train190.png)  !![Wgan_context_val](/images/Wgan_context_val195.png)
+
+
 
 ### Acknowledgments. 
+
+Thanks are due to Stephanie Laroque, Sandeep Subramanian and Chiheb Trabelsi for discussions and help. 
+A immense thank you also to Olexa Bilaniuk for his amazing technical support, especially debugging Theano. 
+
 
 ### References
 
