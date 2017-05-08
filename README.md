@@ -9,9 +9,7 @@ The task is applied on images from the mscoco dataset downsampled to 64 x 64 ima
 
 **Approach amd results**. I focussed on conditioning on the outside border, leaving the inclusion of captions for future work. 
 I approached the problem using deep convolutional autoencoder architectures akin to Ref [1], with L2 and adversarial losses [2]. 
-I obtained my best results with a relatively simple fully convolutional architecture with skip connections, and a weighted combination of a L2  loss and a Wasserstein GAN (WGAN) loss [3]. 
-
-Exemples of reconstructed images from the mscoco  validation set are given below:
+I obtained my best results with a relatively simple fully convolutional architecture with skip connections, and a weighted combination of a L2  loss and a Wasserstein GAN (WGAN) loss [3].
 
 
 Details of my experiments are given in the next sections.
